@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "软字幕提取器",
+  "version": "0.1",
+  "description": "提取网页video原生软字幕VTT，导出SRT或纯文本",
+  "permissions": [
+    "activeTab",
+    "downloads"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
