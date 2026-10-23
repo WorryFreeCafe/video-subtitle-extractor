@@ -10,12 +10,12 @@ chrome.tabs.query({active:true, currentWindow:true}, tabs=>{
 
 function render(){
   if(subList.length === 0){
-    listEl.innerHTML = `<div class="empty">未检测到原生 track 软字幕</div>`;
+    listEl.innerHTML = `<div class="empty">未检测到字幕<br>原生 track / B站 JSON 均未找到</div>`;
     return;
   }
   listEl.innerHTML = subList.map((item, idx)=>`
     <div class="item">
-      <div>${item.label || item.srclang || "字幕"}</div>
+      <div>${item.label || item.srclang || "字幕"}<span class="tag">${item.type === 'bilibili' ? 'B站' : 'track'}</span></div>
       <div class="btns">
         <button data-idx="${idx}" data-type="srt">导出 SRT</button>
         <button data-idx="${idx}" data-type="txt">导出 纯文本</button>
@@ -31,6 +31,8 @@ function render(){
       chrome.runtime.sendMessage({
         type:"download_sub",
         url: subItem.src,
+        source: subItem.type || "native",
+        content: subItem.content,
         format: fmt,
         label: subItem.label || "subtitle"
       })
