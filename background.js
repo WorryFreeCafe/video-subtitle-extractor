@@ -84,8 +84,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         outContent = msg.format === "srt" ? vttToSrt(vttText) : vttToPlainText(vttText);
       }
       if (!outContent.trim()) throw new Error("字幕内容为空");
-      const blobUrl = URL.createObjectURL(new Blob([outContent], {type:"text/plain;charset=utf-8"}));
-      chrome.downloads.download({url:blobUrl, filename:fileName || (label + (msg.format === "srt" ? ".srt" : ".txt"))}, downloadId => {
+      const downloadUrl = "data:text/plain;charset=utf-8," + encodeURIComponent(outContent);
+      chrome.downloads.download({url:downloadUrl, filename:fileName || (label + (msg.format === "srt" ? ".srt" : ".txt"))}, downloadId => {
         if (chrome.runtime.lastError) sendResponse({ok:false, error:chrome.runtime.lastError.message});
         else sendResponse({ok:true, downloadId});
       });
